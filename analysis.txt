@@ -1,32 +1,25 @@
 import pandas as pd
 
-# Load the dataset
-df = pd.read_csv('netflix_titles.csv')
 
-# Display basic info about the dataset
+df = pd.read_csv('netflix_titles.csv')
 print("Dataset Info:")
 print(df.info())
 
-# Display the first 5 rows
 print("\nFirst 5 Rows:")
 print(df.head())
-
-# Clean the data: Drop duplicates and handle missing values
 df.drop_duplicates(inplace=True)
 df.fillna({'director': 'Unknown', 'cast': 'Unknown', 'country': 'Unknown'}, inplace=True)
 print("\nMissing values handled!")
 
-# Basic statistics
 print("\nDataset Statistics:")
 print(df.describe(include='all'))
 
-# Explore the data: 
 # 1. Count of TV Shows vs Movies
 type_counts = df['type'].value_counts()
 print("\nTV Shows vs Movies:")
 print(type_counts)
 
-# 2. Most common genres
+
 print("\nMost Common Genres:")
 print(df['listed_in'].value_counts().head(10))
 
