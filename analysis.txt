@@ -1,0 +1,68 @@
+import pandas as pd
+
+# Load the dataset
+df = pd.read_csv('netflix_titles.csv')
+
+# Display basic info about the dataset
+print("Dataset Info:")
+print(df.info())
+
+# Display the first 5 rows
+print("\nFirst 5 Rows:")
+print(df.head())
+
+# Clean the data: Drop duplicates and handle missing values
+df.drop_duplicates(inplace=True)
+df.fillna({'director': 'Unknown', 'cast': 'Unknown', 'country': 'Unknown'}, inplace=True)
+print("\nMissing values handled!")
+
+# Basic statistics
+print("\nDataset Statistics:")
+print(df.describe(include='all'))
+
+# Explore the data: 
+# 1. Count of TV Shows vs Movies
+type_counts = df['type'].value_counts()
+print("\nTV Shows vs Movies:")
+print(type_counts)
+
+# 2. Most common genres
+print("\nMost Common Genres:")
+print(df['listed_in'].value_counts().head(10))
+
+# 3. Top 5 countries producing content
+print("\nTop 5 Countries Producing Content:")
+print(df['country'].value_counts().head(5))
+
+# Filter: Shows released after 2015
+recent_shows = df[df['release_year'] > 2015]
+print("\nShows Released After 2015:")
+print(recent_shows[['title', 'release_year', 'type']].head(10))
+
+# Grouping and aggregation: 
+# Content count by release year
+yearly_content = df.groupby('release_year')['title'].count().sort_index(ascending=False)
+print("\nContent Count by Release Year:")
+print(yearly_content.head(10))
+
+# Visualization
+try:
+    import matplotlib.pyplot as plt
+    # Content type distribution
+    type_counts.plot(kind='bar', color=['red', 'blue'])
+    plt.title('Distribution of Content Types')
+    plt.xlabel('Type')
+    plt.ylabel('Count')
+    plt.show()
+
+    # Yearly content trend
+    yearly_content.plot(kind='line', figsize=(10, 6), marker='o')
+    plt.title('Yearly Content Trend')
+    plt.xlabel('Year')
+    plt.ylabel('Number of Titles')
+    plt.grid(True)
+    plt.show()
+except ImportError:
+    print("\nMatplotlib not installed. Install it with: pip install matplotlib")
+
+print("\nAnalysis Complete!")
